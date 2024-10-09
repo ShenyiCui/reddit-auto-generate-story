@@ -33,7 +33,14 @@ for file_path in audio.iterdir():
 
     if duration < clip_size:
         continue
-    # split the audio file into 50 second clips
+    
+    div_val = 1
+    while True: 
+        if duration // div_val <= clip_size:
+            break
+        div_val += 1 
+    clip_size = math.ceil(duration / div_val)
+    
     num_clips = math.ceil(duration / clip_size)
     for i in range(int(num_clips)):
         end_time = (i + 1) * clip_size
