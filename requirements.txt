@@ -1,0 +1,8 @@
+moviepy
+mutagen
+requests
+bs4
+ollama
+openai
+ushlex
+openai-whisper

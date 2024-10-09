@@ -1,0 +1,24 @@
+# ignore __pycache__ directories
+__pycache__/
+# ignore .pyc files
+*.pyc
+
+# ignore mp4 files in the output directory
+output/*.mp4
+
+# ignore mp3 files in the audio and audio-clips directories
+audio/*.mp3
+audio-clips/*.mp3
+
+# ignore the mp4 files in the template-videos directory
+template-videos/*.mp4
+
+# ignore the srt files in the transcripts directory
+transcripts/*.srt
+
+# ignore the txt files in the stories directory except for placeholder.txt
+stories/*.txt
+!stories/placeholder.txt
+
+# ignore ds_store files
+.DS_Store
