@@ -2,6 +2,7 @@ import whisper
 import ollama
 from datetime import timedelta
 from pathlib import Path
+from whisper.utils import get_writer 
 
 def create_srt(file_name, transcript):
     segments = transcript['segments']
@@ -33,4 +34,13 @@ for file_path in audio_clips.iterdir():
         continue
     file_name = file_path.stem
     result = model.transcribe(audio=str(file_path))
-    create_srt(curr_dir / f"transcripts/{file_name}.srt", result)
+    # Set SRT Line and words width
+    word_options = {
+        "highlight_words": False,
+        "max_line_count": 1,
+        "max_line_width": 5,
+    }
+    print("writing srt file")
+    srt_writer = get_writer(output_format='srt', output_dir='./transcripts')
+    srt_writer(result, file_path, word_options)
+    # create_srt(curr_dir / f"transcripts/{file_name}.srt", result)
