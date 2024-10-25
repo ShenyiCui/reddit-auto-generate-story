@@ -50,7 +50,7 @@ def trim_video(video_file, start_time, end_time, output_file):
 
 def burn_subtitles(video_file, srt_file, output_file):
     temp_output_file = output_file.parent / f"{output_file.stem}_temp{output_file.suffix}"  
-    command = shlex.split(f"ffmpeg -y -i {video_file} -vf \"subtitles={srt_file}:force_style='Alignment=10,FontName=Lato'\" {temp_output_file}")
+    command = shlex.split(f"ffmpeg -y -i {video_file} -vf \"subtitles={srt_file}:force_style='Alignment=10,FontName=Roboto'\" {temp_output_file}")
     subprocess.run(command)
     command = shlex.split(f"mv {temp_output_file} {output_file}")
     subprocess.run(command)
@@ -80,7 +80,7 @@ for audio_clip in audio_clips.iterdir():
     if video_name_prefix in _map:
         template_video = _map[video_name_prefix]
     else:
-        template_videos_list = list(template_videos.iterdir())
+        template_videos_list = [x for x in list(template_videos.iterdir()) if x.suffix == ".mp4"]
         # get a random video from the list
         template_video = random.choice(template_videos_list)
         _map[video_name_prefix] = template_video

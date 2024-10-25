@@ -3,6 +3,11 @@ from mutagen.mp3 import MP3
 import subprocess
 import shlex
 import math
+import sys
+
+def speed_up_audio(file_path, speed, output_file):
+    command = shlex.split(f"ffmpeg -y -i {file_path} -filter:a \"atempo={speed}\" {output_file}")
+    subprocess.run(command)
 
 def get_mp3_duration(file_path):
     audio = MP3(file_path)
@@ -22,9 +27,28 @@ def split_audio(file_path, start_time, end_time, output_file, is_end):
 
 curr_dir = Path(__file__).parent
 audio = curr_dir / "audio"
+speedup_audio_dir = curr_dir / "speedup-audio"
 audio_clips = curr_dir / "audio-clips"
 clip_size = 50
+
+# get first parameter as a flag from the command line
+speed = float(sys.argv[1]) if len(sys.argv) > 1 else 1.36
+
 for file_path in audio.iterdir():
+    if file_path.suffix == ".mp3":
+        # speed up the audiofile by 1.36x
+        speed_up_audio(file_path, speed, speedup_audio_dir / file_path.name)
+
+is_clip = sys.argv[2] if len(sys.argv) > 2 else "n"
+if is_clip.lower() != "y":
+    # copy the speedup audio files to the audio clips directory
+    for file_path in speedup_audio_dir.iterdir():
+        if file_path.suffix == ".mp3":
+            command = shlex.split(f"cp {file_path} {audio_clips}")
+            subprocess.run(command)
+    exit()
+
+for file_path in speedup_audio_dir.iterdir():
   if file_path.suffix == ".mp3":
     file = open(file_path, "r")
     file_name = file_path.stem
